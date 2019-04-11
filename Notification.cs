@@ -37,7 +37,6 @@ namespace ServiceMonitor
             {
                 message += $"\n WARNING: Service was stopped and failed to restart correctly!";
             }
-            message += restartSuccess;
             message += messageFooter;
             client.Send(from, to, subject, message);
         }
