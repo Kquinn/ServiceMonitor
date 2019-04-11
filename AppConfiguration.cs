@@ -10,23 +10,13 @@ namespace ServiceMonitor
 {
     public static class AppConfiguration
     {
-        public static List<Service> GetConfiguration()
+        public static List<Service> GetServiceListConfiguration()
         {
             List<Service> output = new List<Service>();
-            XmlDocument config = new XmlDocument();
-            try
-            {
-                string applicationName = Process.GetCurrentProcess().ProcessName;
-                Messages.LogMessage($"Loading configuration file.");
-                config.Load($"{applicationName}.config");
-            }
-            catch (Exception ex)
-            {
-                Messages.LogMessage(ex.Message, EventLogEntryType.Error, EventID.FailedToLoadConfiguration);
-                Environment.Exit(100);
-            }
+            XmlNode serviceMonitorConfig = GetConfigXML();
 
-            foreach (XmlNode service in config["Services"].SelectNodes("Service"))
+
+            foreach (XmlNode service in serviceMonitorConfig["Services"].SelectNodes("Service"))
             {
                 try
                 {
@@ -91,7 +81,7 @@ namespace ServiceMonitor
                             currentService.ClearMSMQ = bool.TryParse(service["ClearMSMQ"].FirstChild.Value, out bool result);
                         }
 
-                        currentService.Process = GetPathOfService(currentService.Name);
+                        currentService.Process = GetServicePath(currentService.Name);
                         if (currentService.Process == null)
                         {
                             throw new Exception($"Unable to locate path to executable for service {currentService.Name}");
@@ -107,7 +97,26 @@ namespace ServiceMonitor
             return output;
         }
 
-        private static string GetPathOfService(string serviceName)
+        private static XmlNode GetConfigXML()
+        {
+            try
+            {
+                XmlDocument config = new XmlDocument();
+                string applicationName = Process.GetCurrentProcess().ProcessName;
+                Messages.LogMessage($"Loading configuration file.");
+                config.Load($"{applicationName}.config");
+                XmlNode serviceMonitorConfig = config["ServiceMonitor"];
+                return serviceMonitorConfig;
+            }
+            catch (Exception ex)
+            {
+                Messages.LogMessage(ex.Message, EventLogEntryType.Error, EventID.FailedToLoadConfiguration);
+                throw ex;
+            }
+        }
+
+
+        private static string GetServicePath(string serviceName)
         {
             WqlObjectQuery wqlObjectQuery = new WqlObjectQuery(string.Format("SELECT * FROM Win32_Service WHERE Name = '{0}'", serviceName));
             ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(wqlObjectQuery);
@@ -122,5 +131,34 @@ namespace ServiceMonitor
             return null;
         }
 
+        public static SMTPConfig GetSMTPConfiguration()
+        {
+            XmlNode serviceMonitorConfig = GetConfigXML();
+            SMTPConfig output = new SMTPConfig();
+            foreach (XmlNode smtpConfig in serviceMonitorConfig.SelectNodes("SMTP"))
+            {
+                try
+                {
+                    if (smtpConfig["Server"] != null)
+                    {
+                        output.Server = smtpConfig["Server"].FirstChild.Value;
+                    }
+                    if (smtpConfig["ToEmail"] != null)
+                    {
+                        output.ToEmail = smtpConfig["ToEmail"].FirstChild.Value;
+                    }
+                    if (smtpConfig["FromEmail"] != null)
+                    {
+                        output.FromEmail = smtpConfig["FromEmail"].FirstChild.Value;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Messages.LogMessage(ex.Message, EventLogEntryType.Error, EventID.SMTPConfigurationFailed);
+                }
+            }
+            return output;
+        }
+        
     }
 }

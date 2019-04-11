@@ -8,7 +8,7 @@ namespace ServiceMonitor
 {
     public class MonitorService
     {
-        public static async Task Monitor(Service targetService)
+        public static async Task Monitor(Service targetService,SMTPConfig smtpConfiguration)
         {
             await Task.Delay(10).ConfigureAwait(false);
             Messages.LogMessage($"Begin monitoring service for {targetService.Name}");
@@ -67,7 +67,7 @@ namespace ServiceMonitor
                             Messages.LogMessage($"Service exceeded memory threshhold, exiting monitoring loop and restarting service.", EventLogEntryType.Error, EventID.MemoryThresholdExceeded);
 
                             bool serviceRestartedSuccessfully = ServiceControl.RestartService(targetService.serviceController, true, targetService.ClearMSMQ);
-                            Notification.SendEmail(targetService.Name, memsize, targetService.MemoryLimitMB, serviceRestartedSuccessfully);
+                            Notification.SendEmail(targetService, smtpConfiguration, memsize, serviceRestartedSuccessfully);
                             break;
                         }
                     }

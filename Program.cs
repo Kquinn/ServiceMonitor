@@ -12,30 +12,28 @@ namespace ServiceMonitor
 
     public class Program : ServiceBase
     {
-        private static List<Service> serviceList = new List<Service>();
-
         protected override void OnStart(string[] args)
         {
             runApplication();
         }
 
-        static void consoleApp(string[] args)
-        {
-
-            runApplication(true);
-
-        }
-
         private static void runApplication(bool console = false)
         {
+
+
             List<Timer> timerList = new List<Timer>(); //We store these in a list so GC does not eat them
-            List<Service> serviceList = AppConfiguration.GetConfiguration();
-            foreach (Service currentService in serviceList)
+
+            ConfigurationModel configuration = new ConfigurationModel {
+                    ServiceList = AppConfiguration.GetServiceListConfiguration(),
+                    SMTPConfig = AppConfiguration.GetSMTPConfiguration() };
+
+            foreach (Service currentService in configuration.ServiceList)
             {
-                timerList.Add(MonitorTimer.CreateTimer(currentService));
-                Task callTask = Task.Run(() => MonitorService.Monitor(currentService));
+                timerList.Add(MonitorTimer.CreateTimer(currentService, configuration.SMTPConfig));
+                Task callTask = Task.Run(() => MonitorService.Monitor(currentService, configuration.SMTPConfig));
             }
-            if(console)
+
+            if (console)
             {
                 while (true)
                 {
@@ -66,7 +64,7 @@ namespace ServiceMonitor
                                 break;
                             }
                         default:
-                            consoleApp(args);
+                            runApplication(true);
                             break;
                     }
                 }
@@ -78,7 +76,7 @@ namespace ServiceMonitor
             }
             else if (Environment.UserInteractive && args.Length == 0)
             {
-                consoleApp(args);
+                runApplication(true);
             }
             else
             {

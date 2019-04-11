@@ -5,7 +5,7 @@ namespace ServiceMonitor
 {
     public class MonitorTimer
     {
-        public static Timer CreateTimer(Service currentService)
+        public static Timer CreateTimer(Service currentService,SMTPConfig smtpConfiguration)
         {
             TimerCallback timerCallback = new TimerCallback(MonitorTimerCallback);
 

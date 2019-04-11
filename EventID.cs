@@ -8,6 +8,7 @@
             ServiceInstallationFailed = 1003,
             AcquiredProcessID = 1004,
             TimerRestart = 1005,
+            SMTPConfigurationFailed = 1006,
             Generic = 9999
     }
     

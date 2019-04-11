@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppConfiguration.cs" />
+    <Compile Include="ConfigurationModel.cs" />
     <Compile Include="EventID.cs" />
     <Compile Include="Messages.cs" />
     <Compile Include="MonitorProcess.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="ServiceControl.cs" />
+    <Compile Include="SMTPConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

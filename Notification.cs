@@ -5,12 +5,12 @@ namespace ServiceMonitor
 {
     public class Notification
     {
-        public static void SendEmail(string serviceName, double memorySize, int memoryThreshold, bool restartSuccess)
+        public static void SendEmail(Service service, SMTPConfig smtpConfiguration, double memorySize, bool restartSuccess)
         {
-            SmtpClient client = new SmtpClient("smtp4apps.pylusd.org");
-            string from = "ServiceMonitor@pylusd.org";
-            string to = "kquinn@pylusd.org";
-            string subject = $"Service {serviceName} -";
+            SmtpClient client = new SmtpClient(smtpConfiguration.Server);
+            string from = smtpConfiguration.FromEmail;
+            string to = smtpConfiguration.ToEmail;
+            string subject = $"Service {service.Name} -";
 
             if (restartSuccess)
             {
@@ -21,7 +21,7 @@ namespace ServiceMonitor
                 subject += "WARNING - Service failed to restart";
             }
 
-            string message = $"Service:{serviceName}\nMemory Threshold:{memoryThreshold}MB\nCurrent Memory Usage:{memorySize}MB";
+            string message = $"Service:{service.Name}\nMemory Threshold:{service.MemoryLimitMB}MB\nCurrent Memory Usage:{memorySize}MB";
 
             string messageFooter =
                 "\n\n\n" +
