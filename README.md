@@ -1,8 +1,9 @@
 # Future Development
 This is a list of features that will eventually be built in to ServiceMonitor
+* Solve bug affecting ServiceMonitor process where the loop seems to end or get stuck with no output to console
 * Refine ServiceMonitor process
 * Implement ProcessMonitor in configuration file
-* Inlude SMTP in configuration file
+~~* Inlude SMTP in configuration file~~
 
 # Purpose
 The goal of ServiceMonitor is to automatically monitor, report, and restart on a service with a memory leak. In an ideal setting this software would be unnecessary, but we often operate in less than ideal conditions. Using this software means that the service(s) you are monitoring (Target Service) may be restarted and some processing information may be lost as a result.
