@@ -51,10 +51,10 @@ ServiceMonitor may be run in the console by specifying no arguments at runtime. 
 ServiceMonitor logs to the console when run in the console environment and logs to the Event Log when run as a service. This is intended to allow for testing and debugging from the console without adding extraneous information to the Event Log.
 
 # Event IDs
-1000 - FailedToLoadConfiguration
-1001 - ServiceDoesNotExist
-1002 - MemoryThresholdExceeded
-1003 - ServiceInstallationFailed
-1004 - AcquiredProcessID
-1005 - TimerRestart
-9999 - Generic
+* 1000 - FailedToLoadConfiguration
+* 1001 - ServiceDoesNotExist
+* 1002 - MemoryThresholdExceeded
+* 1003 - ServiceInstallationFailed
+* 1004 - AcquiredProcessID
+* 1005 - TimerRestart
+* 9999 - Generic
