@@ -5,10 +5,10 @@ using System.ServiceProcess;
 namespace ServiceMonitor
 {
     [RunInstaller(true)]
-    public class MyWindowsServiceInstaller : Installer
+    public class SvcInstaller : Installer
     {
-        public const string InternalServiceName = "***REMOVED***ReportingMonitoringService";
-        public MyWindowsServiceInstaller()
+        public const string InternalServiceName = "Service Monitor";
+        public SvcInstaller()
         {
             var processInstaller = new ServiceProcessInstaller();
             var serviceInstaller = new ServiceInstaller();
