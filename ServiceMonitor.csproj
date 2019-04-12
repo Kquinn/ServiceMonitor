@@ -71,9 +71,6 @@
     <Compile Include="MonitorProcess.cs" />
     <Compile Include="MonitorService.cs" />
     <Compile Include="MonitorTimer.cs" />
-    <Compile Include="MyWindowsServiceInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Notification.cs" />
     <Compile Include="Program.cs">
       <SubType>Component</SubType>
@@ -82,6 +79,9 @@
     <Compile Include="Service.cs" />
     <Compile Include="ServiceControl.cs" />
     <Compile Include="SMTPConfig.cs" />
+    <Compile Include="SvcInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

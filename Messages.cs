@@ -21,7 +21,7 @@ namespace ServiceMonitor
             }
             else
             {
-                EventLog.WriteEntry("***REMOVED***ReportingServiceMonitor", message, logEntryType, (int)eventID);
+                EventLog.WriteEntry("ServiceMonitor", message, logEntryType, (int)eventID);
             }
         }
     }
